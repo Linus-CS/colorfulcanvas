@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;900&display=swap");
+
+body {
+  background: #f9efdc;
+}
+
+.container {
+  width: 100%;
+  height: 100vh;
+}
+
+.canvas-container {
+  width: 100%;
+  height: 100.5%;
+  position: relative;
+}
+
+.canvas {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+}
+
+.suse-container {
+  width: 12vw;
+  height: 15vh;
+  padding-top: 0.5%;
+  background: #ffffff;
+  border: 3px solid #000000;
+  position: absolute;
+  top: 5vh;
+  right: 10%;
+  box-shadow: 0.3vw 0.3vw;
+}
+
+.suse-logo {
+  width: 100%;
+  height: 100%;
+}
+
+.box-container {
+  position: absolute;
+  padding: 2%;
+  width: 30%;
+  height: 52.5%;
+  background: #eecedf;
+  border: 3px solid #000000;
+  box-shadow: 0.3vw 0.3vw;
+  text-align: center;
+}
+
+.box-container h2 {
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 3.9vw;
+  line-height: 110%;
+  margin: 0;
+}
+
+.box-container p {
+  font-family: "Archivo";
+  padding: 6%;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.2vw;
+  line-height: 1.4vw;
+  text-align: center;
+  color: #000000;
+  margin: 0;
+  margin-bottom: 4vh;
+}
+
+.box-button {
+  box-sizing: border-box;
+  border: 3px solid #000000;
+  border-radius: 32.5px;
+  box-shadow: 0.3vw 0.3vw;
+  font-family: "Archivo";
+  font-size: 1.5vw;
+  font-weight: 600;
+  padding: 2.5% 5%;
+  background: #ee5d2b;
+  color: inherit;
+  text-decoration: none;
+  bottom: 0;
+}
+
+.box-button:visited {
+  color: inherit;
+  background: #ee5d2b;
+  border: 3px solid #000000;
+  border-radius: 32.5px;
+  box-shadow: 0.3vw 0.3vw;
+}
+.box-button:focus {
+  color: inherit;
+  background: #ee5d2b;
+  border: 3px solid #000000;
+  border-radius: 32.5px;
+  box-shadow: 0.3vw 0.3vw;
+}
+
+.box-button:active {
+  color: inherit;
+  background: #ee5d2b;
+  border: 3px solid #000000;
+  border-radius: 32.5px;
+  box-shadow: 0.3vw 0.3vw;
+}
+
+.artworks-container {
+  width: 100%;
+  height: 100vh;
+}
