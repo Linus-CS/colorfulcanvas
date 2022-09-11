@@ -4,7 +4,7 @@ const toggle = document.getElementById("toggle");
 const canvas = document.getElementById("canvas");
 const grid_colors = document.getElementById("grid-colors");
 const colors = document.getElementById("colors");
-const export_button = document.getElementById("export");
+const exportButton = document.getElementById("export");
 let [rows, columns] = [range.valueAsNumber * 13, range.valueAsNumber * 9];
 const gridObj = new Grid(canvas, rows, columns);
 range.oninput = () => {
@@ -24,7 +24,7 @@ canvas.onmousemove = (e) => {
         gridObj.markRect(x, y);
     }
 };
-export_button.onclick = (e) => {
+exportButton.onclick = (e) => {
     let download = document.createElement("a");
     download.href = canvas.toDataURL("png");
     download.download = "amazingImage.png";

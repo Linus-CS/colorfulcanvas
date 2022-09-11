@@ -4,7 +4,7 @@ export class Grid {
   private canvas: HTMLCanvasElement;
   private grid: Map<number, Map<number, string>> = new Map();
   private ctx: CanvasRenderingContext2D;
-  private rect_len: number;
+  private rectLen: number;
 
   public selectedColor: string;
 
@@ -19,7 +19,7 @@ export class Grid {
     this.canvas.height = canvas.clientHeight * 2;
     this.ctx = canvas.getContext("2d")!;
     this.ctx.lineWidth = 5;
-    this.rect_len = this.canvas.width / columns;
+    this.rectLen = this.canvas.width / columns;
     this.selectedColor = "black";
     this._color = "black";
     this._outlines = true;
@@ -42,17 +42,17 @@ export class Grid {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.applyToRects((row, column, rect_x, rect_y) => {
       this.ctx.fillStyle = this.grid.get(row)?.get(column)!;
-      this.ctx.fillRect(rect_x, rect_y, this.rect_len + 1, this.rect_len + 1);
+      this.ctx.fillRect(rect_x, rect_y, this.rectLen + 1, this.rectLen + 1);
       if (this._outlines)
-        this.ctx.strokeRect(rect_x, rect_y, this.rect_len, this.rect_len);
+        this.ctx.strokeRect(rect_x, rect_y, this.rectLen, this.rectLen);
     });
   }
 
   public markRect(x: number, y: number, unmark = false) {
     this.applyToRects((row, column, rect_x, rect_y) => {
-      if (x > rect_x + this.rect_len) return;
+      if (x > rect_x + this.rectLen) return;
       if (x < rect_x) return;
-      if (y > rect_y + this.rect_len) return;
+      if (y > rect_y + this.rectLen) return;
       if (y < rect_y) return;
       this.grid.get(row)?.set(column, this.selectedColor);
       this.render();
@@ -68,15 +68,15 @@ export class Grid {
   private applyToRects(func: RectFunc) {
     for (let r = 0; r < this._size.rows; r++) {
       for (let c = 0; c < this._size.columns; c++) {
-        const rect_x = c * this.rect_len;
-        const rect_y = r * this.rect_len;
+        const rect_x = c * this.rectLen;
+        const rect_y = r * this.rectLen;
         func(r, c, rect_x, rect_y);
       }
     }
   }
 
   public set size(new_size) {
-    this.rect_len = this.canvas.width / new_size.columns;
+    this.rectLen = this.canvas.width / new_size.columns;
     this._size = new_size;
     this.setGrid();
     this.render();
