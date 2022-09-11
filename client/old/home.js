@@ -15,7 +15,7 @@ const ctx = canvas.getContext("2d");
 ctx.lineWidth = 5;
 ctx.strokeStyle = "black";
 
-function initGrid() {
+function init_grid() {
   grid.rows = {};
   for (let r = 0; r < rows; r++) {
     grid.rows[r] = {};
@@ -93,7 +93,7 @@ function render() {
   }
 }
 
-initGrid();
+init_grid();
 render();
 const [new_l, new_t] = wrapCoords((3 * rect_len) / 2, (3 * rect_len) / 2);
 box.style.left = new_l + "px";
@@ -153,7 +153,7 @@ function wrapCoords(x, y) {
         x >= rect_x &&
         y >= rect_y
       ) {
-        return [rect_x + rect_len / 2, rect_y + rect_len / 2];
+        return [rect_x + rect_len / 2 - 1, rect_y + rect_len / 2 - 1];
       }
     }
   }

@@ -1,21 +1,24 @@
-version: "1"
+version: "3"
 
 services:
   rust-server:
     container_name: rust-server
     build:
-      context: ./rust-server
-      dockerfile: ./rust-server/dev.dockerfile
+      context: ./
+      dockerfile: dev.dockerfile
     restart: always
     ports:
-      - 443:3000
+      - 3000:3000
+    volumes:
+      - ./server:/dev/server/
+      - ./client:/dev/client/
     networks:
       - my_network
 
   mongodb:
     image: mongo:5.0
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=colourful-user
+      - MONGO_INITDB_ROOT_USERNAME=colorful-user
       - MONGO_INITDB_ROOT_PASSWORD=IaascUtcaA%44
     networks:
       - my_network

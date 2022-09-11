@@ -47,7 +47,6 @@ body {
 
 .canvas-container {
   width: 30%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -142,7 +141,7 @@ body {
   width: 1.8vw;
   height: 2.4vw;
   cursor: pointer;
-  background-image: url("./assets/range.png");
+  background-image: url("../assets/range.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 2vw 2.4vw;
@@ -155,7 +154,7 @@ body {
   width: 1.8vw;
   height: 2.4vw;
   cursor: pointer;
-  background-image: url("./assets/range.png");
+  background-image: url("../assets/range.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: 2vw 2.4vw;
@@ -267,14 +266,14 @@ body {
   margin-top: 2%;
 }
 
-.small-colour-palett {
+.small-color-palett {
   aspect-ratio: 1/1;
   width: 45%;
   border: 3px solid #000000;
   background: #ffffff;
 }
 
-.settings-colours-container {
+.settings-colors-container {
   width: 96%;
   height: 30%;
   text-align: start;
@@ -284,13 +283,13 @@ body {
   padding: 2%;
 }
 
-.settings-colours-selection-grid {
+.settings-colors-selection-grid {
   display: grid;
   grid-template-columns: auto auto auto auto auto auto auto auto auto;
   margin-top: 2%;
 }
 
-.big-colour-palett {
+.big-color-palett {
   aspect-ratio: 1/1;
   width: 60%;
   border: 3px solid #000000;
