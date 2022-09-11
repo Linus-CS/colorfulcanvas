@@ -17,18 +17,13 @@ async fn main() {
             },
         ));
 
-    let config = RustlsConfig::from_pem_file("certs/cert.crt", "certs/private.key")
+    let config = RustlsConfig::from_pem_file("certs/MyCertificate.crt", "certs/MyKey.key")
         .await
         .unwrap();
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     println!("listening on {}", addr);
-    // axum_server::bind_rustls(addr, config)
-    //     .serve(app.into_make_service())
-    //     .await
-    //     .unwrap();
-
-    axum::Server::bind(&addr)
+    axum_server::bind_rustls(addr, config)
         .serve(app.into_make_service())
         .await
         .unwrap();
