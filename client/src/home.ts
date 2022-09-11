@@ -20,63 +20,59 @@ canvas.onmousemove = (e) => {
     }
 };
 
-const rect_len = canvas.width / columns;
-const new_l_t = wrapCoords((3 * rect_len) / 2, (3 * rect_len) / 2)!;
-const new_l = new_l_t[0];
-const new_t = new_l_t[1];
+const rectLen = canvas.width / columns;
+const [left, top] = wrapCoords((3 * rectLen) / 2, (3 * rectLen) / 2)!;
 
-box.style.left = new_l + "px";
-box.style.top = new_t + "px";
-let m_x: number, m_y: number, old_left: number, old_top: number;
+box.style.left = left + "px";
+box.style.top = top + "px";
+let mX: number, mY: number, oldLeft: number, oldTop: number;
 let move = false;
 box.onmousedown = (e) => {
-    m_x = e.clientX;
-    m_y = e.clientY;
-    old_left = parseInt(box.style.left.split("px")[0]);
-    old_top = parseInt(box.style.top.split("px")[0]);
+    mX = e.clientX;
+    mY = e.clientY;
+    oldLeft = parseInt(box.style.left.split("px")[0]);
+    oldTop = parseInt(box.style.top.split("px")[0]);
     move = true;
 };
 box.onmouseup = (e) => {
     if (move) {
-        const new_left_top = wrapCoords(parseInt(box.style.left.split("px")[0]), parseInt(box.style.top.split("px")[0]))!;
-        const new_left = new_left_top[0];
-        const new_top = new_left_top[1];
-        box.style.left = new_left + "px";
-        box.style.top = new_top + "px";
+        const [newLeft, newTop] = wrapCoords(parseInt(box.style.left.split("px")[0]), parseInt(box.style.top.split("px")[0]))!;
+        box.style.left = newLeft + "px";
+        box.style.top = newTop + "px";
     }
     move = false;
 };
 box.onmousemove = (e) => {
     if (e.buttons !== 0 && move) {
-        const diff_x = e.clientX - m_x;
-        const diff_y = e.clientY - m_y;
-        const new_left = old_left + diff_x;
-        const new_top = old_top + diff_y;
-        if (new_left < 0)
+        const diffX = e.clientX - mX;
+        const diffY = e.clientY - mY;
+        const newLeft = oldLeft + diffX;
+        const newTop = oldTop + diffY;
+        if (newLeft < 0)
             box.style.left = "0px";
-        else if (new_left > container.clientWidth - box.clientWidth)
+        else if (newLeft > container.clientWidth - box.clientWidth)
             box.style.left = container.clientWidth - box.clientWidth + "px";
         else
-            box.style.left = new_left + "px";
-        if (new_top < 0)
+            box.style.left = newLeft + "px";
+        if (newTop < 0)
             box.style.top = "0px";
-        else if (new_top > container.clientHeight - box.clientHeight)
+        else if (newTop > container.clientHeight - box.clientHeight)
             box.style.top = container.clientHeight - box.clientHeight + "px";
         else
-            box.style.top = new_top + "px";
+            box.style.top = newTop + "px";
     }
 };
 function wrapCoords(x: number, y: number) {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
-            const rect_x = (c * rect_len) / 2;
-            const rect_y = (r * rect_len) / 2;
-            if (x < rect_x + rect_len &&
-                y < rect_y + rect_len &&
-                x >= rect_x &&
-                y >= rect_y) {
-                return [rect_x + rect_len / 2 - 1, rect_y + rect_len / 2 - 1];
-            }
+            const rectX = (c * rectLen) / 2;
+            const rectY = (r * rectLen) / 2;
+            if (x > rectX + rectLen) return;
+            if (x < rectX) return;
+            if (y > rectY + rectLen) return;
+            if (y < rectY) return;
+            return [rectX + rectLen / 2 - 1, rectY + rectLen / 2 - 1];
         }
     }
 }
+

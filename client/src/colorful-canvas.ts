@@ -15,8 +15,11 @@ export class Grid {
   constructor(canvas: HTMLCanvasElement, rows: number, columns: number) {
     this.grid = new Map();
     this.canvas = canvas;
+
+    /* Increase resolution for higher quality image */
     this.canvas.width = canvas.clientWidth * 2;
     this.canvas.height = canvas.clientHeight * 2;
+
     this.ctx = canvas.getContext("2d")!;
     this.ctx.lineWidth = 5;
     this.rectLen = this.canvas.width / columns;
@@ -110,6 +113,7 @@ export function getCursorPosition(event: MouseEvent, canvas: HTMLCanvasElement) 
   const y = event.clientY - rect.top;
   return [x * 2, y * 2];
 }
+
 export function randomColor() {
   const r = Math.round(Math.random() * 255)
     .toString(16)
