@@ -4,12 +4,13 @@ export class Grid {
   private canvas: HTMLCanvasElement;
   private grid: Map<number, Map<number, string>> = new Map();
   private ctx: CanvasRenderingContext2D;
-  private rectLen: number;
 
   public selectedColor: string;
 
+  private _rectLen: number;
+  private _offsetHeight: number;
   private _color: string;
-  private _outlines: boolean;
+  private _outline: boolean;
   private _size: { rows: number, columns: number };
 
   constructor(canvas: HTMLCanvasElement, rows: number, columns: number) {
@@ -17,15 +18,16 @@ export class Grid {
     this.canvas = canvas;
 
     /* Increase resolution for higher quality image */
+    this._offsetHeight = 1.7778 - (screen.width / screen.height);
     this.canvas.width = canvas.clientWidth * 2;
-    this.canvas.height = canvas.clientHeight * 2;
+    this.canvas.height = canvas.clientHeight * (2 - this._offsetHeight);
 
     this.ctx = canvas.getContext("2d")!;
     this.ctx.lineWidth = 5;
-    this.rectLen = this.canvas.width / columns;
+    this._rectLen = this.canvas.width / columns;
     this.selectedColor = "black";
     this._color = "black";
-    this._outlines = true;
+    this._outline = true;
     this._size = { rows, columns };
     this.setGrid();
     this.render();
@@ -45,17 +47,17 @@ export class Grid {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.applyToRects((row, column, rect_x, rect_y) => {
       this.ctx.fillStyle = this.grid.get(row)?.get(column)!;
-      this.ctx.fillRect(rect_x, rect_y, this.rectLen + 1, this.rectLen + 1);
-      if (this._outlines)
-        this.ctx.strokeRect(rect_x, rect_y, this.rectLen, this.rectLen);
+      this.ctx.fillRect(rect_x, rect_y, this._rectLen + 1, this._rectLen + 1);
+      if (this._outline)
+        this.ctx.strokeRect(rect_x, rect_y, this._rectLen, this._rectLen);
     });
   }
 
   public markRect(x: number, y: number, unmark = false) {
     this.applyToRects((row, column, rect_x, rect_y) => {
-      if (x > rect_x + this.rectLen) return;
+      if (x > rect_x + this._rectLen) return;
       if (x < rect_x) return;
-      if (y > rect_y + this.rectLen) return;
+      if (y > rect_y + this._rectLen) return;
       if (y < rect_y) return;
       this.grid.get(row)?.set(column, this.selectedColor);
       this.render();
@@ -71,15 +73,15 @@ export class Grid {
   private applyToRects(func: RectFunc) {
     for (let r = 0; r < this._size.rows; r++) {
       for (let c = 0; c < this._size.columns; c++) {
-        const rect_x = c * this.rectLen;
-        const rect_y = r * this.rectLen;
+        const rect_x = c * this._rectLen;
+        const rect_y = r * this._rectLen;
         func(r, c, rect_x, rect_y);
       }
     }
   }
 
   public set size(new_size) {
-    this.rectLen = this.canvas.width / new_size.columns;
+    this._rectLen = this.canvas.width / new_size.columns;
     this._size = new_size;
     this.setGrid();
     this.render();
@@ -89,13 +91,13 @@ export class Grid {
     return this._size;
   }
 
-  public set outlines(value) {
-    this._outlines = value;
+  public set outline(value) {
+    this._outline = value;
     this.render();
   }
 
-  public get outlines() {
-    return this._outlines;
+  public get outline() {
+    return this._outline;
   }
 
   public set color(value) {
@@ -106,12 +108,28 @@ export class Grid {
   public get color() {
     return this._color;
   }
+
+  public get rectLen() {
+    return this._rectLen;
+  }
+
+  public get offsetHeight() {
+    return this._offsetHeight;
+  }
+
+  public toJson() {
+    const tmp = Array.from(this.grid.values());
+    const gridData = tmp.map((value) => Array.from(value.values()));
+    const data = { grid: gridData, size: this._size, outline: this._outline, color: this._color };
+    return JSON.stringify(data);
+  }
 }
 export function getCursorPosition(event: MouseEvent, canvas: HTMLCanvasElement) {
   const rect = canvas.getBoundingClientRect();
   const x = event.clientX - rect.left;
   const y = event.clientY - rect.top;
-  return [x * 2, y * 2];
+  let offsetHeight = 1.7778 - (screen.width / screen.height);
+  return [x * 2, y * (2 - offsetHeight)];
 }
 
 export function randomColor() {

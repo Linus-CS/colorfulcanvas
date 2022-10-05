@@ -3,14 +3,15 @@ export class Grid {
         this.grid = new Map();
         this.grid = new Map();
         this.canvas = canvas;
+        this._offsetHeight = 1.7778 - (screen.width / screen.height);
         this.canvas.width = canvas.clientWidth * 2;
-        this.canvas.height = canvas.clientHeight * 2;
+        this.canvas.height = canvas.clientHeight * (2 - this._offsetHeight);
         this.ctx = canvas.getContext("2d");
         this.ctx.lineWidth = 5;
-        this.rectLen = this.canvas.width / columns;
+        this._rectLen = this.canvas.width / columns;
         this.selectedColor = "black";
         this._color = "black";
-        this._outlines = true;
+        this._outline = true;
         this._size = { rows, columns };
         this.setGrid();
         this.render();
@@ -30,19 +31,19 @@ export class Grid {
         this.applyToRects((row, column, rect_x, rect_y) => {
             var _a;
             this.ctx.fillStyle = (_a = this.grid.get(row)) === null || _a === void 0 ? void 0 : _a.get(column);
-            this.ctx.fillRect(rect_x, rect_y, this.rectLen + 1, this.rectLen + 1);
-            if (this._outlines)
-                this.ctx.strokeRect(rect_x, rect_y, this.rectLen, this.rectLen);
+            this.ctx.fillRect(rect_x, rect_y, this._rectLen + 1, this._rectLen + 1);
+            if (this._outline)
+                this.ctx.strokeRect(rect_x, rect_y, this._rectLen, this._rectLen);
         });
     }
     markRect(x, y, unmark = false) {
         this.applyToRects((row, column, rect_x, rect_y) => {
             var _a;
-            if (x > rect_x + this.rectLen)
+            if (x > rect_x + this._rectLen)
                 return;
             if (x < rect_x)
                 return;
-            if (y > rect_y + this.rectLen)
+            if (y > rect_y + this._rectLen)
                 return;
             if (y < rect_y)
                 return;
@@ -60,14 +61,14 @@ export class Grid {
     applyToRects(func) {
         for (let r = 0; r < this._size.rows; r++) {
             for (let c = 0; c < this._size.columns; c++) {
-                const rect_x = c * this.rectLen;
-                const rect_y = r * this.rectLen;
+                const rect_x = c * this._rectLen;
+                const rect_y = r * this._rectLen;
                 func(r, c, rect_x, rect_y);
             }
         }
     }
     set size(new_size) {
-        this.rectLen = this.canvas.width / new_size.columns;
+        this._rectLen = this.canvas.width / new_size.columns;
         this._size = new_size;
         this.setGrid();
         this.render();
@@ -75,12 +76,12 @@ export class Grid {
     get size() {
         return this._size;
     }
-    set outlines(value) {
-        this._outlines = value;
+    set outline(value) {
+        this._outline = value;
         this.render();
     }
-    get outlines() {
-        return this._outlines;
+    get outline() {
+        return this._outline;
     }
     set color(value) {
         this._color = value;
@@ -89,12 +90,25 @@ export class Grid {
     get color() {
         return this._color;
     }
+    get rectLen() {
+        return this._rectLen;
+    }
+    get offsetHeight() {
+        return this._offsetHeight;
+    }
+    toJson() {
+        const tmp = Array.from(this.grid.values());
+        const gridData = tmp.map((value) => Array.from(value.values()));
+        const data = { grid: gridData, size: this._size, outline: this._outline, color: this._color };
+        return JSON.stringify(data);
+    }
 }
 export function getCursorPosition(event, canvas) {
     const rect = canvas.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-    return [x * 2, y * 2];
+    let offsetHeight = 1.7778 - (screen.width / screen.height);
+    return [x * 2, y * (2 - offsetHeight)];
 }
 export function randomColor() {
     const r = Math.round(Math.random() * 255)

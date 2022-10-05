@@ -20,7 +20,7 @@ canvas.onmousemove = (e) => {
     }
 };
 
-const rectLen = canvas.width / columns;
+const rectLen = gridObj.rectLen;
 const [left, top] = wrapCoords((3 * rectLen) / 2, (3 * rectLen) / 2)!;
 
 box.style.left = left + "px";
@@ -66,11 +66,11 @@ function wrapCoords(x: number, y: number) {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             const rectX = (c * rectLen) / 2;
-            const rectY = (r * rectLen) / 2;
-            if (x > rectX + rectLen) return;
-            if (x < rectX) return;
-            if (y > rectY + rectLen) return;
-            if (y < rectY) return;
+            const rectY = (r * rectLen) / (2 - gridObj.offsetHeight);
+            if (x > rectX + rectLen) continue;
+            if (x < rectX) continue;
+            if (y > rectY + rectLen) continue;
+            if (y < rectY) continue;
             return [rectX + rectLen / 2 - 1, rectY + rectLen / 2 - 1];
         }
     }

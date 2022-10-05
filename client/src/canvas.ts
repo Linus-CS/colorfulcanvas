@@ -6,6 +6,7 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const grid_colors = document.getElementById("grid-colors") as HTMLDivElement;
 const colors = document.getElementById("colors") as HTMLDivElement;
 const exportButton = document.getElementById("export") as HTMLDivElement;
+const saveButton = document.getElementById("save") as HTMLDivElement;
 
 let [rows, columns] = [range.valueAsNumber * 13, range.valueAsNumber * 9];
 const gridObj = new Grid(canvas, rows, columns);
@@ -16,7 +17,7 @@ range.oninput = () => {
 };
 
 toggle.onchange = () => {
-    gridObj.outlines = toggle.checked;
+    gridObj.outline = toggle.checked;
 };
 
 canvas.onclick = (e) => {
@@ -37,6 +38,12 @@ exportButton.onclick = (e) => {
     download.download = "amazingImage.png";
     download.click();
 };
+
+saveButton.onclick = (e) => {
+    fetch("/save", { method: "post", body: gridObj.toJson() }).then((res) => {
+        console.log("Status of save: " + res.status);
+    })
+}
 
 type ClickFunc = (element: HTMLDivElement) => void;
 

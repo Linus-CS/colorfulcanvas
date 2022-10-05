@@ -5,6 +5,7 @@ const canvas = document.getElementById("canvas");
 const grid_colors = document.getElementById("grid-colors");
 const colors = document.getElementById("colors");
 const exportButton = document.getElementById("export");
+const saveButton = document.getElementById("save");
 let [rows, columns] = [range.valueAsNumber * 13, range.valueAsNumber * 9];
 const gridObj = new Grid(canvas, rows, columns);
 range.oninput = () => {
@@ -12,7 +13,7 @@ range.oninput = () => {
     gridObj.size = { rows, columns };
 };
 toggle.onchange = () => {
-    gridObj.outlines = toggle.checked;
+    gridObj.outline = toggle.checked;
 };
 canvas.onclick = (e) => {
     let [x, y] = getCursorPosition(e, canvas);
@@ -29,6 +30,11 @@ exportButton.onclick = (e) => {
     download.href = canvas.toDataURL("png");
     download.download = "amazingImage.png";
     download.click();
+};
+saveButton.onclick = (e) => {
+    fetch("/save", { method: "post", body: gridObj.toJson() }).then((res) => {
+        console.log("Status of save: " + res.status);
+    });
 };
 function addChildrenOnClick(obj, func) {
     for (const element of obj.childNodes) {
