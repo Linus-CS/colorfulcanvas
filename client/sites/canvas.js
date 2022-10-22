@@ -31,7 +31,7 @@ exportButton.onclick = (e) => {
     download.download = "amazingImage.png";
     download.click();
 };
-saveButton.onclick = (e) => {
+saveButton.onclick = () => {
     fetch("/save", { method: "post", body: gridObj.toJson() }).then((res) => {
         console.log("Status of save: " + res.status);
     });

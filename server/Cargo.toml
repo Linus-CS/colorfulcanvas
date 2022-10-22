@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 tokio =  "1.21.0"
 axum = "0.5.16"
+chrono = "0.4.22"
 axum-server = { version="0.4.2", features=["tls-rustls"] }
 tower-http = { version="0.3.0", features=["fs", "trace"] }
 mongodb = "2.3.1"

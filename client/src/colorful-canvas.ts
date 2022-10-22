@@ -1,5 +1,8 @@
 type RectFunc = (row: number, column: number, rect_x: number, rect_y: number) => void;
 
+const OFFSET_CONST = 1.7778;
+const LINE_CONST = 0.05625;
+
 export class Grid {
   private canvas: HTMLCanvasElement;
   private grid: Map<number, Map<number, string>> = new Map();
@@ -18,12 +21,11 @@ export class Grid {
     this.canvas = canvas;
 
     /* Increase resolution for higher quality image */
-    this._offsetHeight = 1.7778 - (screen.width / screen.height);
+    this._offsetHeight = OFFSET_CONST - (screen.width / screen.height);
     this.canvas.width = canvas.clientWidth * 2;
     this.canvas.height = canvas.clientHeight * (2 - this._offsetHeight);
 
     this.ctx = canvas.getContext("2d")!;
-    this.ctx.lineWidth = 5;
     this._rectLen = this.canvas.width / columns;
     this.selectedColor = "black";
     this._color = "black";
@@ -44,6 +46,7 @@ export class Grid {
 
   private render() {
     this.ctx.strokeStyle = this._color;
+    this.ctx.lineWidth = LINE_CONST * this._rectLen;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.applyToRects((row, column, rect_x, rect_y) => {
       this.ctx.fillStyle = this.grid.get(row)?.get(column)!;
@@ -68,6 +71,18 @@ export class Grid {
         }, 3000);
       }
     });
+  }
+
+  public setRect(row: number, column: number, unmark = false) {
+    this.grid.get(row)?.set(column, this.selectedColor);
+    this.render();
+    if (unmark) {
+      setTimeout(() => {
+        this.grid.get(row)?.set(column, "white");
+        this.render();
+      }, 3000);
+    }
+
   }
 
   private applyToRects(func: RectFunc) {
@@ -133,14 +148,5 @@ export function getCursorPosition(event: MouseEvent, canvas: HTMLCanvasElement) 
 }
 
 export function randomColor() {
-  const r = Math.round(Math.random() * 255)
-    .toString(16)
-    .padStart(2, "0");
-  const g = Math.round(Math.random() * 255)
-    .toString(16)
-    .padStart(2, "0");
-  const b = Math.round(Math.random() * 255)
-    .toString(16)
-    .padStart(2, "0");
-  return `#${r}${g}${b}`;
+  return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
 }

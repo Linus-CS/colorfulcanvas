@@ -6,8 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="nav.css" />
     <link rel="stylesheet" href="home.css" />
-    <link rel="shortcut icon" href="../assets/favicon.ico" type="image/x-icon" />
+    <link
+      rel="shortcut icon"
+      href="../assets/favicon.ico"
+      type="image/x-icon"
+    />
     <script type="module" src="home.js" defer></script>
+    <script type="module" src="artworks.js" defer></script>
     <title>Home</title>
   </head>
   <body>
@@ -19,7 +24,7 @@
       <a class="nav-element" href="">About</a>
       <a class="nav-element lang-element" href="">ENG</a>
       <div class="suse-container">
-        <img class="suse-logo" src="../assets/suse.png"></img>
+        <img class="suse-logo" src="../assets/suse.png" />
       </div>
     </nav>
     <div class="fake-nav"></div>
@@ -28,13 +33,28 @@
         <canvas id="canvas" class="canvas"></canvas>
         <div id="box" class="box-container">
           <h2>Grid Box Painting</h2>
-          <p>Kurzer Beschreibungstext, Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+          <p>
+            Kurzer Beschreibungstext, Lorem ipsum dolor sit amet, consectetur
+            adipisici elit, sed eiusmod tempor incidunt ut labore et dolore
+            magna aliqua. Ut enim ad minim veniam, quis nostrud.
+          </p>
           <a href="colorful-canvas.html" class="box-button">
             Create A New Grid Painting
           </a>
         </div>
       </div>
+      <h2 class="arts-header">Have a look at designs others made</h2>
+      <div class="artworks-container">
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork art-center"></canvas>
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork"></canvas>
+        <canvas class="artwork"></canvas>
+      </div>
     </div>
-    <div class="artworks-container"></div>
   </body>
 </html>

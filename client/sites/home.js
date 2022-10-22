@@ -5,7 +5,6 @@ const container = document.getElementById("container");
 let [rows, columns] = [20, 35];
 let gridObj = new Grid(canvas, rows, columns);
 canvas.onclick = (e) => {
-    console.log(e.buttons);
     let [x, y] = getCursorPosition(e, canvas);
     gridObj.markRect(x, y, true);
 };

@@ -4,11 +4,11 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement;
 const box = document.getElementById("box") as HTMLDivElement;
 const container = document.getElementById("container") as HTMLDivElement;
 
+/* Grid at the top of the page */
 let [rows, columns] = [20, 35];
 let gridObj = new Grid(canvas, rows, columns);
 
 canvas.onclick = (e) => {
-    console.log(e.buttons);
     let [x, y] = getCursorPosition(e, canvas);
     gridObj.markRect(x, y, true);
 };
@@ -20,6 +20,7 @@ canvas.onmousemove = (e) => {
     }
 };
 
+/* Box inside the grid, that can be moved around */
 const rectLen = gridObj.rectLen;
 const [left, top] = wrapCoords((3 * rectLen) / 2, (3 * rectLen) / 2)!;
 
@@ -27,6 +28,7 @@ box.style.left = left + "px";
 box.style.top = top + "px";
 let mX: number, mY: number, oldLeft: number, oldTop: number;
 let move = false;
+
 box.onmousedown = (e) => {
     mX = e.clientX;
     mY = e.clientY;
@@ -34,6 +36,7 @@ box.onmousedown = (e) => {
     oldTop = parseInt(box.style.top.split("px")[0]);
     move = true;
 };
+
 box.onmouseup = (e) => {
     if (move) {
         const [newLeft, newTop] = wrapCoords(parseInt(box.style.left.split("px")[0]), parseInt(box.style.top.split("px")[0]))!;
@@ -42,6 +45,7 @@ box.onmouseup = (e) => {
     }
     move = false;
 };
+
 box.onmousemove = (e) => {
     if (e.buttons !== 0 && move) {
         const diffX = e.clientX - mX;
@@ -62,6 +66,7 @@ box.onmousemove = (e) => {
             box.style.top = newTop + "px";
     }
 };
+
 function wrapCoords(x: number, y: number) {
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
@@ -75,4 +80,3 @@ function wrapCoords(x: number, y: number) {
         }
     }
 }
-

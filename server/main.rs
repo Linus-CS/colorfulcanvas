@@ -1,22 +1,31 @@
 use axum::{
     http::StatusCode,
-    routing::{get_service, post},
-    Router,
+    routing::{get, get_service, post},
+    Json, Router,
 };
 use axum_server::tls_rustls::RustlsConfig;
-use mongodb::{bson, options::ClientOptions, Client};
+use mongodb::{
+    bson::{self, doc, Document},
+    options::ClientOptions,
+    Client, Collection,
+};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::{io, net::SocketAddr};
 use tower_http::services::ServeDir;
 
+const MONGODB_URL: &str = "mongodb://localhost:27017";
+
 #[tokio::main]
 async fn main() {
-    let app = Router::new().route("/save", post(save_canvas)).fallback(
-        get_service(ServeDir::new("../client")).handle_error(|_error: io::Error| async move {
-            (StatusCode::FORBIDDEN, format!("Internal server error.."))
-        }),
-    );
+    let app = Router::new()
+        .route("/save", post(save_grid))
+        .route("/retrieve", get(retrieve_grids))
+        .fallback(get_service(ServeDir::new("../client")).handle_error(
+            |_error: io::Error| async move {
+                (StatusCode::FORBIDDEN, format!("Internal server error.."))
+            },
+        ));
 
     let config = RustlsConfig::from_pem_file("certs/MyCertificate.crt", "certs/MyKey.key")
         .await
@@ -30,21 +39,102 @@ async fn main() {
         .unwrap();
 }
 
-async fn save_canvas(body: String) {
-    let client_options = ClientOptions::parse("mongodb://localhost:27017")
-        .await
-        .unwrap();
+async fn save_grid(body: String) -> StatusCode {
+    let client_options = ClientOptions::parse(MONGODB_URL).await.unwrap();
 
-    let grid: Grid = serde_json::from_str(&body).expect("Could not parse json to Grid struct.");
-    println!("{:?}", grid);
+    let grid: Grid = match serde_json::from_str(&body) {
+        Ok(grid) => grid,
+        Err(_) => return StatusCode::EXPECTATION_FAILED,
+    };
 
-    let client = Client::with_options(client_options).unwrap();
-    let database = client.database("test");
-    let collections = database.collection("grids");
+    let client = match Client::with_options(client_options) {
+        Ok(client) => client,
+        Err(_) => return StatusCode::INTERNAL_SERVER_ERROR,
+    };
+
+    let collection = get_or_build_collection(&client, "colorful", "grids").await;
 
     let document = bson::to_bson(&grid).unwrap();
 
-    collections.insert_one(document, None).await.unwrap();
+    match collection.insert_one(document, None).await {
+        Ok(_) => return StatusCode::ACCEPTED,
+        Err(_) => return StatusCode::INTERNAL_SERVER_ERROR,
+    }
+}
+
+async fn retrieve_grids() -> Json<Vec<Grid>> {
+    println!("Connecting...");
+    let client_options = ClientOptions::parse(MONGODB_URL).await.unwrap();
+    println!("Connected.");
+
+    let client = match Client::with_options(client_options) {
+        Ok(client) => client,
+        Err(_) => return Json(vec![]),
+    };
+
+    let collection = get_or_build_collection(&client, "colorful", "grids").await;
+
+    let mut results = collection
+        .find(None, None)
+        .await
+        .expect("Failed to find any.");
+
+    let mut result = results.current();
+    loop {
+        println!("Result: {:?}", result);
+        match results.advance().await {
+            Ok(true) => result = results.current(),
+            Err(_) => panic!("hehe"),
+            _ => break,
+        }
+    }
+
+    let result = match collection
+        .find_one(
+            doc! {
+                "id": "1"
+            },
+            None,
+        )
+        .await
+    {
+        Ok(item) => item,
+        Err(_) => return Json(vec![]),
+    };
+
+    let grid = match result {
+        Some(grid) => Json(vec![grid]),
+        None => return Json(vec![]),
+    };
+
+    println!("Grid: {:?}", grid);
+
+    grid
+}
+
+async fn select_random_grids() {
+    let client_options = ClientOptions::parse(MONGODB_URL).await.unwrap();
+
+    let client = Client::with_options(client_options).unwrap();
+    let collection = get_or_build_collection::<Document>(&client, "colorful", "grids").await;
+
+    let meta_data = collection
+        .find_one(doc! {"id": "1"}, None)
+        .await
+        .unwrap()
+        .unwrap();
+
+    let now = chrono::Local::now();
+}
+
+async fn get_or_build_collection<T>(
+    client: &Client,
+    db_name: &str,
+    col_name: &str,
+) -> Collection<T> {
+    let database = client.database("colorful");
+    let collection = database.collection("grids");
+    collection
 }
 
 #[derive(Debug, Serialize, Deserialize)]

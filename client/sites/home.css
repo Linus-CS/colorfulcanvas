@@ -110,6 +110,32 @@ body {
 }
 
 .artworks-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  height: 100vh;
+  height: 60vh;
+}
+
+.artwork {
+  width: 9vw;
+  height: 13vw;
+  background-color: white;
+  border: 0.2vw solid black;
+  margin: 1vw;
+}
+
+.art-center {
+  width: 13vw;
+  height: 17.3333vw;
+}
+
+.arts-header {
+  width: 40vw;
+  margin-inline: auto;
+  font-family: "Archivo";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 3vw;
+  text-align: center;
 }

@@ -1,13 +1,14 @@
+const OFFSET_CONST = 1.7778;
+const LINE_CONST = 0.05625;
 export class Grid {
     constructor(canvas, rows, columns) {
         this.grid = new Map();
         this.grid = new Map();
         this.canvas = canvas;
-        this._offsetHeight = 1.7778 - (screen.width / screen.height);
+        this._offsetHeight = OFFSET_CONST - (screen.width / screen.height);
         this.canvas.width = canvas.clientWidth * 2;
         this.canvas.height = canvas.clientHeight * (2 - this._offsetHeight);
         this.ctx = canvas.getContext("2d");
-        this.ctx.lineWidth = 5;
         this._rectLen = this.canvas.width / columns;
         this.selectedColor = "black";
         this._color = "black";
@@ -27,6 +28,7 @@ export class Grid {
     }
     render() {
         this.ctx.strokeStyle = this._color;
+        this.ctx.lineWidth = LINE_CONST * this._rectLen;
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.applyToRects((row, column, rect_x, rect_y) => {
             var _a;
@@ -57,6 +59,18 @@ export class Grid {
                 }, 3000);
             }
         });
+    }
+    setRect(row, column, unmark = false) {
+        var _a;
+        (_a = this.grid.get(row)) === null || _a === void 0 ? void 0 : _a.set(column, this.selectedColor);
+        this.render();
+        if (unmark) {
+            setTimeout(() => {
+                var _a;
+                (_a = this.grid.get(row)) === null || _a === void 0 ? void 0 : _a.set(column, "white");
+                this.render();
+            }, 3000);
+        }
     }
     applyToRects(func) {
         for (let r = 0; r < this._size.rows; r++) {
@@ -111,15 +125,6 @@ export function getCursorPosition(event, canvas) {
     return [x * 2, y * (2 - offsetHeight)];
 }
 export function randomColor() {
-    const r = Math.round(Math.random() * 255)
-        .toString(16)
-        .padStart(2, "0");
-    const g = Math.round(Math.random() * 255)
-        .toString(16)
-        .padStart(2, "0");
-    const b = Math.round(Math.random() * 255)
-        .toString(16)
-        .padStart(2, "0");
-    return `#${r}${g}${b}`;
+    return `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
 }
 //# sourceMappingURL=colorful-canvas.js.map
