@@ -19,11 +19,6 @@
 
 ## Structure
 
-| :zap:  JS files are result of compiled TS files and should not be viewed as sourcefiles |
-|-----------------------------------------|
-* Under `/client/sites` you find all html, css and js files used in the frontend
-* Under `/client/src` you find all ts files.
-* Under `/client/assets` you find all assets used on the pages.
 
 * Under `/server/main.rs` you find the server sourcefile.
 
@@ -35,3 +30,9 @@
 * `./init-mongo.js` contains initialization configuration used by the mongodb container.
 
 * `./rebuild.sh` is a shell script to delete all images, rebuild them and then start new containers.
+
+| :zap:  JS files are result of compiled TS files and should not be viewed as sourcefiles |
+|-----------------------------------------|
+* Under `/client/sites` you find all html, css and js files used in the frontend
+* Under `/client/src` you find all ts files.
+* Under `/client/assets` you find all assets used on the pages.
