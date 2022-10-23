@@ -35,6 +35,22 @@ export class Grid {
     this.render();
   }
 
+  public static fromObj(canvas: HTMLCanvasElement, obj: { color: string, grid: [[string]], outline: boolean, size: { rows: number, columns: number } }) {
+    const grid = new Grid(canvas, obj.size.rows, obj.size.columns);
+
+    grid.grid = new Map(
+      obj.grid.map((row, id_r) => {
+        return [id_r, new Map(
+          row.map((color, id_c) => {
+            return [id_c, color];
+          })
+        )]
+      })
+    );
+    grid.render();
+    return grid;
+  }
+
   private setGrid() {
     for (let r = 0; r < this._size.rows; r++) {
       this.grid.set(r, new Map());

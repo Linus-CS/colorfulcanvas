@@ -75,44 +75,31 @@ async fn retrieve_grids() -> Json<Vec<Grid>> {
         Err(_) => return Json(vec![]),
     };
 
-    let collection = get_or_build_collection(&client, "colorful", "grids").await;
+    let collection = get_or_build_collection::<Grid>(&client, "colorful", "grids").await;
 
     let mut results = collection
         .find(None, None)
         .await
         .expect("Failed to find any.");
 
-    let mut result = results.current();
-    loop {
-        println!("Result: {:?}", result);
+    let mut result: Grid =
+        bson::from_slice(results.current().to_raw_document_buf().as_bytes()).unwrap();
+
+    let mut grids = vec![];
+
+    for _ in 0..9 {
+        grids.push(result);
         match results.advance().await {
-            Ok(true) => result = results.current(),
+            Ok(true) => {
+                result =
+                    bson::from_slice(results.current().to_raw_document_buf().as_bytes()).unwrap()
+            }
             Err(_) => panic!("hehe"),
             _ => break,
         }
     }
 
-    let result = match collection
-        .find_one(
-            doc! {
-                "id": "1"
-            },
-            None,
-        )
-        .await
-    {
-        Ok(item) => item,
-        Err(_) => return Json(vec![]),
-    };
-
-    let grid = match result {
-        Some(grid) => Json(vec![grid]),
-        None => return Json(vec![]),
-    };
-
-    println!("Grid: {:?}", grid);
-
-    grid
+    Json(grids)
 }
 
 async fn select_random_grids() {

@@ -17,6 +17,16 @@ export class Grid {
         this.setGrid();
         this.render();
     }
+    static fromObj(canvas, obj) {
+        const grid = new Grid(canvas, obj.size.rows, obj.size.columns);
+        grid.grid = new Map(obj.grid.map((row, id_r) => {
+            return [id_r, new Map(row.map((color, id_c) => {
+                    return [id_c, color];
+                }))];
+        }));
+        grid.render();
+        return grid;
+    }
     setGrid() {
         var _a;
         for (let r = 0; r < this._size.rows; r++) {
