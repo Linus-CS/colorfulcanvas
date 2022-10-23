@@ -82,6 +82,11 @@ async fn retrieve_grids() -> Json<Vec<Grid>> {
         .await
         .expect("Failed to find any.");
 
+    match results.advance().await {
+        Ok(true) => (),
+        _ => return Json(vec![]),
+    }
+
     let mut result: Grid =
         bson::from_slice(results.current().to_raw_document_buf().as_bytes()).unwrap();
 
@@ -94,7 +99,6 @@ async fn retrieve_grids() -> Json<Vec<Grid>> {
                 result =
                     bson::from_slice(results.current().to_raw_document_buf().as_bytes()).unwrap()
             }
-            Err(_) => panic!("hehe"),
             _ => break,
         }
     }
