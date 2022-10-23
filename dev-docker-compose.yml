@@ -18,10 +18,16 @@ services:
   mongodb:
     image: mongo:5.0
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=colorful-user
-      - MONGO_INITDB_ROOT_PASSWORD=IaascUtcaA%44
+      - MONGO_INITDB_DATABASE=colorful
+      - MONGO_INITDB_ROOT_USERNAME=color-user
+      - MONGO_INITDB_ROOT_PASSWORD=secretpw
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init.mongo.js:ro
+      - ./mongo-volume:/data/db
     networks:
       - my_network
+    ports:
+      - 27017:27017
 
 networks:
   my_network:

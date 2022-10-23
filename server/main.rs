@@ -14,7 +14,7 @@ use serde_json::Value;
 use std::{io, net::SocketAddr};
 use tower_http::services::ServeDir;
 
-const MONGODB_URL: &str = "mongodb://localhost:27017";
+const CONNECTION_STRING: &str = "mongodb://color-user:secretpw@mongodb:27017/colorful";
 
 #[tokio::main]
 async fn main() {
@@ -40,7 +40,7 @@ async fn main() {
 }
 
 async fn save_grid(body: String) -> StatusCode {
-    let client_options = ClientOptions::parse(MONGODB_URL).await.unwrap();
+    let client_options = ClientOptions::parse(CONNECTION_STRING).await.unwrap();
 
     let grid: Grid = match serde_json::from_str(&body) {
         Ok(grid) => grid,
@@ -58,13 +58,16 @@ async fn save_grid(body: String) -> StatusCode {
 
     match collection.insert_one(document, None).await {
         Ok(_) => return StatusCode::ACCEPTED,
-        Err(_) => return StatusCode::INTERNAL_SERVER_ERROR,
+        Err(e) => {
+            println!("{e}");
+            return StatusCode::INTERNAL_SERVER_ERROR;
+        }
     }
 }
 
 async fn retrieve_grids() -> Json<Vec<Grid>> {
     println!("Connecting...");
-    let client_options = ClientOptions::parse(MONGODB_URL).await.unwrap();
+    let client_options = ClientOptions::parse(CONNECTION_STRING).await.unwrap();
     println!("Connected.");
 
     let client = match Client::with_options(client_options) {
@@ -113,7 +116,7 @@ async fn retrieve_grids() -> Json<Vec<Grid>> {
 }
 
 async fn select_random_grids() {
-    let client_options = ClientOptions::parse(MONGODB_URL).await.unwrap();
+    let client_options = ClientOptions::parse(CONNECTION_STRING).await.unwrap();
 
     let client = Client::with_options(client_options).unwrap();
     let collection = get_or_build_collection::<Document>(&client, "colorful", "grids").await;
@@ -132,8 +135,8 @@ async fn get_or_build_collection<T>(
     db_name: &str,
     col_name: &str,
 ) -> Collection<T> {
-    let database = client.database("colorful");
-    let collection = database.collection("grids");
+    let database = client.database(db_name);
+    let collection = database.collection(col_name);
     collection
 }
 
