@@ -6,7 +6,7 @@ if [ "$1" == "-r" ]; then
 fi
 
 if [ -d "./mongo-volume" ]; then
-    rm -r "./mongo-volume"
+    sudo rm -r "./mongo-volume"
 fi 
 
 sudo docker system prune -af --volumes
