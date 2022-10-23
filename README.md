@@ -19,8 +19,8 @@
 
 ## Structure
 
-
 * Under `/server/main.rs` you find the server sourcefile.
+* Under `/server/certs` a private key and a SSL certificate need to be provided in order run enable a secure connection.
 
 * `./dev-docker-compose.yml` contains docker-compose configuration for the development server.
 * `./docker-compose.yml` contains docker-compose configuration for the actual server.
@@ -36,3 +36,10 @@
 * Under `/client/sites` you find all html, css and js files used in the frontend
 * Under `/client/src` you find all ts files.
 * Under `/client/assets` you find all assets used on the pages.
+
+## Requirements
+
+* Rust + Cargo `cargo 1.64.0^`
+* Typescript `Version 4.7.4^`
+* Docker `Docker version 20.10.12`
+* Docker Compose `docker-compose version 1.25.0`
