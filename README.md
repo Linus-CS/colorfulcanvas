@@ -39,7 +39,7 @@
 
 ## Requirements
 
-* Rust + Cargo `cargo 1.64.0^`
-* Typescript `Version 4.7.4^`
+* Rust + Cargo `cargo 1.64.0`
+* Typescript `Version 4.7.4`
 * Docker `Docker version 20.10.12`
 * Docker Compose `docker-compose version 1.25.0`
