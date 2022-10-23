@@ -38,6 +38,8 @@ export class Grid {
   public static fromObj(canvas: HTMLCanvasElement, obj: { color: string, grid: [[string]], outline: boolean, size: { rows: number, columns: number } }) {
     const grid = new Grid(canvas, obj.size.rows, obj.size.columns);
 
+    grid._color = obj.color;
+    grid._outline = obj.outline;
     grid.grid = new Map(
       obj.grid.map((row, id_r) => {
         return [id_r, new Map(
@@ -47,6 +49,7 @@ export class Grid {
         )]
       })
     );
+
     grid.render();
     return grid;
   }

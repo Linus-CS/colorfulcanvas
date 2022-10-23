@@ -19,6 +19,8 @@ export class Grid {
     }
     static fromObj(canvas, obj) {
         const grid = new Grid(canvas, obj.size.rows, obj.size.columns);
+        grid._color = obj.color;
+        grid._outline = obj.outline;
         grid.grid = new Map(obj.grid.map((row, id_r) => {
             return [id_r, new Map(row.map((color, id_c) => {
                     return [id_c, color];
