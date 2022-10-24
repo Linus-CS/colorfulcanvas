@@ -1,0 +1,19 @@
+{
+  "Home": { "DE": "Start" },
+  "Create New Grid": { "DE": "Erstelle ein neues Raster" },
+  "About": { "DE": "Über uns" },
+  "Your tools": { "DE": "Deine Werkzeuge" },
+  "Grid Settings": { "DE": "Raster Einstellungen" },
+  "rough": { "DE": "grob" },
+  "detailed": { "DE": "detailiert" },
+  "View the grid": { "DE": "Zeige das Raster" },
+  "On": { "DE": "An" },
+  "Off": { "DE": "Aus" },
+  "Color of the grid": { "DE": "Farbe des Grids" },
+  "Colors": { "DE": "Farben" },
+  "Save your work": { "DE": "Speichern" },
+  "Export your work": { "DE": "Exportieren" },
+  "Have a look at designs others made": {
+    "DE": "Schau dir an, was Andere gemalt haben"
+  }
+}

@@ -10,20 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { Grid, randomColor } from "./colorful-canvas.js";
 const artwork_canvases = document.getElementsByClassName("artwork");
 const grids = [];
+buildArtworks();
 function fetchArtworks() {
-    var _a;
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield fetch("/retrieve");
-        const reader = (_a = res.body) === null || _a === void 0 ? void 0 : _a.getReader();
-        let data = "";
-        while (true) {
-            const chunk = yield (reader === null || reader === void 0 ? void 0 : reader.read());
-            if (chunk === null || chunk === void 0 ? void 0 : chunk.done) {
-                break;
-            }
-            data += new TextDecoder().decode(chunk === null || chunk === void 0 ? void 0 : chunk.value);
+        if (res.ok) {
+            return yield res.json();
         }
-        return JSON.parse(data);
+        return {};
     });
 }
 function buildArtworks() {
@@ -45,5 +39,4 @@ function buildArtworks() {
         }
     });
 }
-buildArtworks();
 //# sourceMappingURL=artworks.js.map

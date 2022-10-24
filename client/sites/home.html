@@ -13,6 +13,7 @@
     />
     <script type="module" src="home.js" defer></script>
     <script type="module" src="artworks.js" defer></script>
+    <script type="module" src="translate.js" defer></script>
     <title>Home</title>
   </head>
   <body>
@@ -22,7 +23,7 @@
       >
       <a class="nav-element" href="colorful-canvas.html">Create New Grid</a>
       <a class="nav-element" href="about.html">About</a>
-      <a class="nav-element lang-element" href="">ENG</a>
+      <a class="nav-element" id="lang-element">ENG</a>
       <div class="suse-container">
         <img class="suse-logo" src="../assets/suse.png" />
       </div>
@@ -44,7 +45,7 @@
         </div>
       </div>
       <h2 class="arts-header">Have a look at designs others made</h2>
-      <div class="artworks-container">
+      <div class="artworks-container" id="artworks">
         <canvas class="artwork"></canvas>
         <canvas class="artwork"></canvas>
         <canvas class="artwork"></canvas>

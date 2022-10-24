@@ -4,19 +4,14 @@ const artwork_canvases: HTMLCollectionOf<HTMLCanvasElement> = document.getElemen
 
 const grids: Grid[] = [];
 
+buildArtworks();
+
 async function fetchArtworks() {
     const res = await fetch("/retrieve")
-    const reader = res.body?.getReader();
-
-    let data = "";
-    while (true) {
-        const chunk = await reader?.read();
-        if (chunk?.done) {
-            break;
-        }
-        data += new TextDecoder().decode(chunk?.value);
+    if (res.ok) {
+        return await res.json();
     }
-    return JSON.parse(data);
+    return {};
 }
 
 async function buildArtworks() {
@@ -39,4 +34,3 @@ async function buildArtworks() {
     }
 }
 
-buildArtworks();
